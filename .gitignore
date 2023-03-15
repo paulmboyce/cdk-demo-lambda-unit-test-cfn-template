@@ -3,6 +3,9 @@
 *.d.ts
 node_modules
 
+# ALlow lambda js files to be picked up by Pipeline
+!lambda/*.js
+
 # CDK asset staging directory
 .cdk.staging
 cdk.out
