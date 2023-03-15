@@ -1,17 +1,17 @@
-import * as cdk from 'aws-cdk-lib';
-import { Template, Match } from 'aws-cdk-lib/assertions';
-import * as CdkWorkshop from '../lib/cdk-workshop-stack';
+import * as cdk from "aws-cdk-lib";
+import { Template, Match } from "aws-cdk-lib/assertions";
+import * as CdkWorkshop from "../lib/cdk-workshop-stack";
 
-test('SQS Queue and SNS Topic Created', () => {
+test("One Lambda Function, hello.handler", () => {
   const app = new cdk.App();
   // WHEN
-  const stack = new CdkWorkshop.CdkWorkshopStack(app, 'MyTestStack');
-  // THEN
-
+  const stack = new CdkWorkshop.CdkWorkshopStack(app, "MyTestStack");
   const template = Template.fromStack(stack);
-
-  template.hasResourceProperties('AWS::SQS::Queue', {
-    VisibilityTimeout: 300
+  // THEN
+  template.resourceCountIs("AWS::Lambda::Function", 1);
+  template.hasResourceProperties("AWS::Lambda::Function", {
+    FunctionName: "DemoApp_HelloHandler",
+    Runtime: "nodejs16.x",
+    Handler: "hello.handler",
   });
-  template.resourceCountIs('AWS::SNS::Topic', 1);
 });
