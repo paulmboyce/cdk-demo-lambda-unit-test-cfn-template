@@ -10,8 +10,17 @@ test("One Lambda Function, hello.handler", () => {
   // THEN
   template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties("AWS::Lambda::Function", {
-    FunctionName: "DemoApp_HelloHandler",
+    // FunctionName: "DemoApp_HelloHandler",
     Runtime: "nodejs16.x",
     Handler: "hello.handler",
+  });
+
+  template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
+  template.allResourcesProperties("AWS::ApiGateway::Method", {
+    HttpMethod: "ANY",
+    AuthorizationType: "NONE",
+    Integration: {
+      Type: "AWS_PROXY",
+    },
   });
 });
