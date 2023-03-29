@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import { join } from "path";
-import { HitCounter } from "./construct/hitcounter";
+import { HitCounter } from "../construct/hitcounter";
 
 export class CdkWorkshopStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
