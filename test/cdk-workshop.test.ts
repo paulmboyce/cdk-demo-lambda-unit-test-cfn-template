@@ -8,11 +8,26 @@ test("One Lambda Function, hello.handler", () => {
   const stack = new CdkWorkshop.CdkWorkshopStack(app, "MyTestStack");
   const template = Template.fromStack(stack);
   // THEN
-  template.resourceCountIs("AWS::Lambda::Function", 1);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   template.hasResourceProperties("AWS::Lambda::Function", {
-    // FunctionName: "DemoApp_HelloHandler",
     Runtime: "nodejs16.x",
     Handler: "hello.handler",
+  });
+  template.hasResourceProperties("AWS::Lambda::Function", {
+    Runtime: "nodejs14.x",
+    Handler: "hitcounter.handler",
+  });
+
+  template.resourceCountIs("AWS::DynamoDB::Table", 1);
+
+  template.hasResourceProperties("AWS::DynamoDB::Table", {
+    // Properties: {
+    //   KeySchema: [
+    //     {
+    //       AttributeName: "path",
+    //     },
+    //   ],
+    // },
   });
 
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);

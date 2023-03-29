@@ -1,0 +1,19 @@
+{
+  "serverlessConsole.services": [
+    {
+      "type": "cloudformation",
+      "title": "test",
+      "timeOffsetInMs": 0,
+      "awsProfile": "default",
+      "stacks": [
+        {
+          "region": "eu-west-1",
+          "stackName": "CdkWorkshopStack",
+          "stage": "dev"
+        }
+      ]
+    }
+  ],
+  "serverlessConsole.autoRefreshInterval": 0,
+  "serverlessConsole.groupPerRequest": true
+}
