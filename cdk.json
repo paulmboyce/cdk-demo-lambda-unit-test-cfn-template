@@ -1,7 +1,7 @@
 {
-  "app": "npx ts-node --prefer-ts-exts src/bin/cdk-workshop.ts",
+  "app": "npx ts-node --prefer-ts-exts dist/bin/cdk-workshop.js",
   "watch": {
-    "include": ["src/lib/*.js", "src/bin/*.js", "src/lambda/*.js"],
+    "include": ["dist/**/*.js"],
     "exclude": [
       "README.md",
       "cdk*.json",
@@ -10,7 +10,8 @@
       "package*.json",
       "yarn.lock",
       "node_modules",
-      "src/test"
+      "src/test",
+      "dist/test"
     ]
   },
   "context": {
