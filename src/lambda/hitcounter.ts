@@ -1,9 +1,13 @@
+import { Context, APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
 const { Lambda, DynamoDB } = require("aws-sdk");
 
 const dynamo = new DynamoDB();
 const lambda = new Lambda();
 
-exports.handler = async function (event: any) {
+exports.handler = async function (
+  event: APIGatewayEvent,
+  ctx: Context
+): Promise<APIGatewayProxyResult> {
   console.log("request:", JSON.stringify(event, undefined, 2));
 
   await dynamo
@@ -24,5 +28,6 @@ exports.handler = async function (event: any) {
 
   console.log("downstream response: ", JSON.stringify(resp, undefined, 2));
 
-  return JSON.parse(resp.Payload);
+  const result: APIGatewayProxyResult = JSON.parse(resp.Payload);
+  return result;
 };
