@@ -17,7 +17,7 @@ export class CdkWorkshopStack extends Stack {
     });
 
     const hitCounterLambda = new HitCounter(this, "Hitcounter", {
-      downstream: helloLambda,
+      downstreamLambda: helloLambda,
     });
 
     const api = new apigw.LambdaRestApi(this, addPrefix("GatewayEndpoint"), {

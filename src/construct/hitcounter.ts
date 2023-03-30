@@ -5,7 +5,7 @@ import * as ddb from "aws-cdk-lib/aws-dynamodb";
 import { join } from "path";
 
 export interface HitCounterProps {
-  downstream: lambda.IFunction;
+  downstreamLambda: lambda.IFunction;
 }
 
 export class HitCounter extends Construct {
@@ -23,11 +23,11 @@ export class HitCounter extends Construct {
       code: lambda.Code.fromAsset(join(__dirname, "../lambda")),
       handler: "hitcounter.handler",
       environment: {
-        DOWNSTREAM_FUNCTION_NAME: props.downstream.functionName,
+        DOWNSTREAM_FUNCTION_NAME: props.downstreamLambda.functionName,
         HITS_TABLE_NAME: dynamoTable.tableName,
       },
     });
     dynamoTable.grantReadWriteData(this.handler);
-    props.downstream.grantInvoke(this.handler);
+    props.downstreamLambda.grantInvoke(this.handler);
   }
 }
