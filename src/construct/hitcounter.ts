@@ -19,7 +19,7 @@ export class HitCounter extends Construct {
     });
 
     this.handler = new lambda.Function(this, "HitCounterLambdaFuncion", {
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset(join(__dirname, "../lambda")),
       handler: "hitcounter.handler",
       environment: {
