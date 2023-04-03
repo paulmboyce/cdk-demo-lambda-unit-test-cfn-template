@@ -10,11 +10,12 @@ export interface HitCounterProps {
 
 export class HitCounter extends Construct {
   public readonly handler: lambda.Function;
+  public readonly dynamoTable: ddb.Table;
 
   constructor(scope: Construct, id: string, props: HitCounterProps) {
     super(scope, id);
 
-    const dynamoTable = new ddb.Table(this, "HitsTable", {
+    this.dynamoTable = new ddb.Table(this, "HitsTable", {
       partitionKey: { name: "path", type: ddb.AttributeType.STRING },
     });
 
@@ -31,12 +32,12 @@ export class HitCounter extends Construct {
       handler: "hitcounter.handler",
       environment: {
         DOWNSTREAM_FUNCTION_NAME: props.downstreamLambda.functionName,
-        HITS_TABLE_NAME: dynamoTable.tableName,
+        HITS_TABLE_NAME: this.dynamoTable.tableName,
       },
       tracing: lambda.Tracing.ACTIVE,
       layers: [nodeModulesLayer],
     });
-    dynamoTable.grantReadWriteData(this.handler);
+    this.dynamoTable.grantReadWriteData(this.handler);
     props.downstreamLambda.grantInvoke(this.handler);
   }
 }

@@ -5,7 +5,7 @@ const dynamo = new AWS.DynamoDB();
 const lambda = new AWS.Lambda();
 
 exports.handler = async function (event: any) {
-  console.log("request:", JSON.stringify(event, undefined, 2));
+  // console.log("request:", JSON.stringify(event, undefined, 2));
 
   await dynamo
     .updateItem({
@@ -23,7 +23,7 @@ exports.handler = async function (event: any) {
     })
     .promise();
 
-  console.log("downstream response: ", JSON.stringify(resp, undefined, 2));
+  // console.log("downstream response: ", JSON.stringify(resp, undefined, 2));
 
   return JSON.parse(resp.Payload);
 };

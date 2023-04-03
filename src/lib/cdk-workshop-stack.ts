@@ -5,6 +5,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import { join } from "path";
 import { HitCounter } from "../construct/hitcounter";
+import { TableViewer } from "cdk-dynamo-table-viewer";
 
 export class CdkWorkshopStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -18,6 +19,12 @@ export class CdkWorkshopStack extends Stack {
 
     const hitCounterLambda = new HitCounter(this, "Hitcounter", {
       downstreamLambda: helloLambda,
+    });
+
+    const viewer = new TableViewer(this, "TableViewer:HitsTable:Name", {
+      table: hitCounterLambda.dynamoTable,
+      title: "TableViewer:HitsTable:Hits",
+      sortBy: "-hits",
     });
 
     const api = new apigw.LambdaRestApi(this, addPrefix("GatewayEndpoint"), {
