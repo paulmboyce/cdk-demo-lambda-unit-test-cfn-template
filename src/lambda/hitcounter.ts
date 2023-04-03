@@ -1,7 +1,8 @@
-const { Lambda, DynamoDB } = require("aws-sdk");
+const AWSXRay = require("aws-xray-sdk-core");
+const AWS = AWSXRay.captureAWS(require("aws-sdk"));
 
-const dynamo = new DynamoDB();
-const lambda = new Lambda();
+const dynamo = new AWS.DynamoDB();
+const lambda = new AWS.Lambda();
 
 exports.handler = async function (event: any) {
   console.log("request:", JSON.stringify(event, undefined, 2));

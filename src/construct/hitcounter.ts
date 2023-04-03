@@ -18,6 +18,13 @@ export class HitCounter extends Construct {
       partitionKey: { name: "path", type: ddb.AttributeType.STRING },
     });
 
+    const nodeModulesLayer = new lambda.LayerVersion(this, "MyLayer", {
+      code: lambda.Code.fromAsset(join(__dirname, "../../src/layers")),
+      compatibleRuntimes: [lambda.Runtime.NODEJS_14_X],
+      // license: 'Apache-2.0',
+      description: "A layer for node_modules",
+    });
+
     this.handler = new lambda.Function(this, "HitCounterLambdaFuncion", {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset(join(__dirname, "../lambda")),
@@ -26,6 +33,8 @@ export class HitCounter extends Construct {
         DOWNSTREAM_FUNCTION_NAME: props.downstreamLambda.functionName,
         HITS_TABLE_NAME: dynamoTable.tableName,
       },
+      tracing: lambda.Tracing.ACTIVE,
+      layers: [nodeModulesLayer],
     });
     dynamoTable.grantReadWriteData(this.handler);
     props.downstreamLambda.grantInvoke(this.handler);
