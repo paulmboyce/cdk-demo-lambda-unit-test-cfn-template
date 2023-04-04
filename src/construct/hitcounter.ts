@@ -17,17 +17,20 @@ export class HitCounter extends Construct {
 
     this.dynamoTable = new ddb.Table(this, "HitsTable", {
       partitionKey: { name: "path", type: ddb.AttributeType.STRING },
+      billingMode: ddb.BillingMode.PROVISIONED,
+      readCapacity: 1,
+      writeCapacity: 1,
     });
 
     const nodeModulesLayer = new lambda.LayerVersion(this, "MyLayer", {
       code: lambda.Code.fromAsset(join(__dirname, "../../src/layers")),
-      compatibleRuntimes: [lambda.Runtime.NODEJS_14_X],
+      compatibleRuntimes: [lambda.Runtime.NODEJS_16_X],
       // license: 'Apache-2.0',
       description: "A layer for node_modules",
     });
 
     this.handler = new lambda.Function(this, "HitCounterLambdaFuncion", {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       code: lambda.Code.fromAsset(join(__dirname, "../lambda")),
       handler: "hitcounter.handler",
       environment: {
