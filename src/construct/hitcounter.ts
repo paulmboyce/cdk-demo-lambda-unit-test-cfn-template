@@ -3,6 +3,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as ddb from "aws-cdk-lib/aws-dynamodb";
 import { join } from "path";
+import { RemovalPolicy } from "aws-cdk-lib";
 
 export interface HitCounterProps {
   downstreamLambda: lambda.IFunction;
@@ -16,10 +17,12 @@ export class HitCounter extends Construct {
     super(scope, id);
 
     this.dynamoTable = new ddb.Table(this, "HitsTable", {
+      tableName: "Hits",
       partitionKey: { name: "path", type: ddb.AttributeType.STRING },
       billingMode: ddb.BillingMode.PROVISIONED,
       readCapacity: 1,
       writeCapacity: 1,
+      removalPolicy: RemovalPolicy.DESTROY, // Not for Production!
     });
 
     const nodeModulesLayer = new lambda.LayerVersion(this, "MyLayer", {

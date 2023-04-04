@@ -21,4 +21,15 @@ describe("Logical Ids", () => {
       "HitcounterHitCounterLambdaFuncionA66335E6"
     );
   });
+
+  test("DynamoDB Table Name and Logical Name", () => {
+    template.resourceCountIs("AWS::DynamoDB::Table", 1);
+    const ddbLogicalIds = Object.keys(
+      template.findResources("AWS::DynamoDB::Table")
+    );
+    template.hasResourceProperties("AWS::DynamoDB::Table", {
+      TableName: "Hits",
+    });
+    expect(ddbLogicalIds[0]).toBe("HitcounterHitsTableEFC5A5B3");
+  });
 });

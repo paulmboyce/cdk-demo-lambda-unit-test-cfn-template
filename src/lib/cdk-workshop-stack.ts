@@ -21,7 +21,7 @@ export class CdkWorkshopStack extends Stack {
       downstreamLambda: helloLambda,
     });
 
-    const viewer = new TableViewer(this, "TableViewer:HitsTable:Desca", {
+    const viewer = new TableViewer(this, "TableViewer:HitsTable", {
       table: hitCounterLambda.dynamoTable,
       title: "TableViewer:HitsTable:Hits",
       sortBy: "-hits",
