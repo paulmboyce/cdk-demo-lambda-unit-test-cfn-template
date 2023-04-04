@@ -63,6 +63,12 @@ describe("Test CDK", () => {
   });
 
   test("One API Gateway,", () => {
+    const apiGatewayLogicalIds = Object.keys(
+      template.findResources("AWS::ApiGateway::RestApi")
+    );
+
+    expect(apiGatewayLogicalIds).toContain("DemoAppGatewayEndpointF35688F1");
+
     template.resourceCountIs("AWS::ApiGateway::RestApi", 2);
     template.allResourcesProperties("AWS::ApiGateway::Method", {
       HttpMethod: "ANY",
