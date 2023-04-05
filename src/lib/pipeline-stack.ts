@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 
 import * as pipelines from "aws-cdk-lib/pipelines";
+import { CdkWorkshopStack } from "./cdk-workshop-stack";
 
 export class PipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -22,5 +23,15 @@ export class PipelineStack extends cdk.Stack {
         commands: ["npm ci", "npm run build", "npx cdk synth"],
       }),
     });
+
+    pipeline.addStage(new CdkWorkshopStage(this, "DEV"));
+  }
+}
+
+class CdkWorkshopStage extends cdk.Stage {
+  constructor(scope: Construct, id: string, props?: cdk.StageProps) {
+    super(scope, id, props);
+
+    new CdkWorkshopStack(this, "APP-CdkWorkshopStack");
   }
 }

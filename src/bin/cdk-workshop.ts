@@ -7,4 +7,9 @@ const app = new cdk.App();
 // CdkWorkshopStack: WILL BE DEPLOYED BY THE PIPELINE
 // Run cdk deploy one time for initial deployment.
 // Then subsequent git push will deploy.
-new PipelineStack(app, "CICDPipeineStack");
+new PipelineStack(app, "CICDPipeineStack", {
+  env: {
+    region: "eu-west-1",
+    account: "369368976179",
+  },
+});
