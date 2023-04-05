@@ -25,6 +25,7 @@ export class PipelineStack extends cdk.Stack {
           "echo 'Running installCommands...\n'",
           "cd src/layers/nodejs",
           "npm ci",
+          "cd ../../../",
         ],
         commands: [
           "pwd",
