@@ -19,7 +19,7 @@ export class PipelineStack extends cdk.Stack {
               "arn:aws:codestar-connections:eu-north-1:369368976179:connection/07b479f0-988e-4277-8186-bac11eb752d3", // Created using the AWS console * });',
           }
         ),
-        commands: ["npm ci", "npm run build", "npx cdk synth"],
+        commands: ["yarn install", "npm run build", "npx cdk synth"],
       }),
     });
   }
