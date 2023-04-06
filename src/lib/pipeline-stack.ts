@@ -31,15 +31,27 @@ export class PipelineStack extends cdk.Stack {
       }),
     });
 
-    const stage = new CdkWorkshopStage(this, "Deploy");
-    const deployStage = pipeline.addStage(stage);
-    deployStage.addPost(
-      new pipelines.CodeBuildStep("TestViewerEndpoint", {
-        projectName: "TestViewerEndpoint",
+    const appStage = new CdkWorkshopStage(this, "DeployApp");
+    const appDeployment = pipeline.addStage(appStage);
+    appDeployment.addPost(
+      new pipelines.CodeBuildStep("TestTableViewerURL", {
+        projectName: "TEST-ViewerEndpoint",
         envFromCfnOutputs: {
-          ENDPOINT_URL: stage.out_TableUrl,
+          TABLE_VIEWER_URL: appStage.out_TableUrl,
         },
-        commands: ["curl --show-error --silent --fail $ENDPOINT_URL"],
+        commands: ["curl --silent --fail --show-error $TABLE_VIEWER_URL"],
+      })
+    );
+    appDeployment.addPost(
+      new pipelines.CodeBuildStep("TestApiGatewayURL", {
+        projectName: "TEST-ApiGatewayURL",
+        envFromCfnOutputs: {
+          API_GATEWAY_URL: appStage.out_GatewayUrl,
+        },
+        commands: [
+          "curl --silent  --fail --show-error $API_GATEWAY_URL/test1",
+          "curl --silent  --fail --show-error $API_GATEWAY_URL/test2",
+        ],
       })
     );
   }
@@ -51,7 +63,7 @@ class CdkWorkshopStage extends cdk.Stage {
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    const stack = new CdkWorkshopStack(this, "APP-CdkWorkshopStack");
+    const stack = new CdkWorkshopStack(this, "CdkWorkshopStack");
     this.out_GatewayUrl = stack.out_GatewayUrl;
     this.out_TableUrl = stack.out_TableUrl;
   }
