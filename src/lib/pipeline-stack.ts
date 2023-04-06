@@ -22,7 +22,7 @@ export class PipelineStack extends cdk.Stack {
         ),
 
         commands: [
-          "bash ./install-layer.sh",
+          "bash ./scripts/pipeline/install-layer.sh",
           "npm ci",
           "npm run build",
           "npm run test",
