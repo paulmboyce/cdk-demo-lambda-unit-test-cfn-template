@@ -31,14 +31,28 @@ export class PipelineStack extends cdk.Stack {
       }),
     });
 
-    pipeline.addStage(new CdkWorkshopStage(this, "DEV"));
+    const stage = new CdkWorkshopStage(this, "Deploy");
+    const deployStage = pipeline.addStage(stage);
+    deployStage.addPost(
+      new pipelines.CodeBuildStep("TestViewerEndpoint", {
+        projectName: "TestViewerEndpoint",
+        envFromCfnOutputs: {
+          ENDPOINT_URL: stage.out_TableUrl,
+        },
+        commands: ["curl --show-error --silent --fail $ENDPOINT_URL"],
+      })
+    );
   }
 }
 
 class CdkWorkshopStage extends cdk.Stage {
+  public readonly out_GatewayUrl: cdk.CfnOutput;
+  public readonly out_TableUrl: cdk.CfnOutput;
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    new CdkWorkshopStack(this, "APP-CdkWorkshopStack");
+    const stack = new CdkWorkshopStack(this, "APP-CdkWorkshopStack");
+    this.out_GatewayUrl = stack.out_GatewayUrl;
+    this.out_TableUrl = stack.out_TableUrl;
   }
 }

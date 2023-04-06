@@ -8,8 +8,8 @@ import { HitCounter } from "../construct/hitcounter";
 import { TableViewer } from "cdk-dynamo-table-viewer";
 
 export class CdkWorkshopStack extends cdk.Stack {
-  readonly gatewayUrl: cdk.CfnOutput;
-  readonly tableUrl: cdk.CfnOutput;
+  public readonly out_GatewayUrl: cdk.CfnOutput;
+  public readonly out_TableUrl: cdk.CfnOutput;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -34,8 +34,10 @@ export class CdkWorkshopStack extends cdk.Stack {
       handler: hitCounterLambda.handler,
     });
 
-    this.gatewayUrl = new cdk.CfnOutput(this, "GatewayURL", { value: api.url });
-    this.tableUrl = new cdk.CfnOutput(this, "TableViewerUrl", {
+    this.out_GatewayUrl = new cdk.CfnOutput(this, "GatewayURL", {
+      value: api.url,
+    });
+    this.out_TableUrl = new cdk.CfnOutput(this, "TableViewerUrl", {
       value: viewer.endpoint,
     });
   }
