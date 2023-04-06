@@ -1,4 +1,4 @@
-import { Duration, Stack, StackProps } from "aws-cdk-lib";
+import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 
 import * as lambda from "aws-cdk-lib/aws-lambda";
@@ -7,8 +7,11 @@ import { join } from "path";
 import { HitCounter } from "../construct/hitcounter";
 import { TableViewer } from "cdk-dynamo-table-viewer";
 
-export class CdkWorkshopStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+export class CdkWorkshopStack extends cdk.Stack {
+  readonly gatewayUrl: cdk.CfnOutput;
+  readonly tableUrl: cdk.CfnOutput;
+
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const helloLambda = new lambda.Function(this, addPrefix("HelloHandler"), {
@@ -29,6 +32,11 @@ export class CdkWorkshopStack extends Stack {
 
     const api = new apigw.LambdaRestApi(this, addPrefix("GatewayEndpoint"), {
       handler: hitCounterLambda.handler,
+    });
+
+    this.gatewayUrl = new cdk.CfnOutput(this, "GatewayURL", { value: api.url });
+    this.tableUrl = new cdk.CfnOutput(this, "TableViewerUrl", {
+      value: viewer.endpoint,
     });
   }
 }
