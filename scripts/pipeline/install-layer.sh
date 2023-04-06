@@ -1,5 +1,5 @@
 #! /usr/bin/bash
-cd ../../src/layers/nodejs
+cd src/layers/nodejs
 echo "Installing packages for Lambda Layer..."
 npm ci
 pwd
