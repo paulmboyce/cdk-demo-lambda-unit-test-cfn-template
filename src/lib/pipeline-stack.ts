@@ -25,6 +25,7 @@ export class PipelineStack extends cdk.Stack {
           "bash ./install-layer.sh",
           "npm ci",
           "npm run build",
+          "npm run test",
           "npx cdk synth",
         ],
       }),
