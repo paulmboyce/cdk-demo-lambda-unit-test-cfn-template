@@ -37,7 +37,7 @@ export class CdkWorkshopStack extends cdk.Stack {
     this.out_GatewayUrl = new cdk.CfnOutput(this, "GatewayURL", {
       value: api.url,
     });
-    this.out_TableUrl = new cdk.CfnOutput(this, "TableViewerUrl", {
+    this.out_TableUrl = new cdk.CfnOutput(this, "TableViewerURL", {
       value: viewer.endpoint,
     });
   }
